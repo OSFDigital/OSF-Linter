@@ -14,6 +14,9 @@
   "scripts": {
     "watch": "babel --watch --out-dir . src",
     "build": "babel --out-dir . src",
+    "lint:isml": "./node_modules/.bin/isml-linter",
+    "build:isml": "./node_modules/.bin/isml-linter --build",
+    "fix:isml": "./node_modules/.bin/isml-linter --autofix",
     "prepare": "cross-env NODE_ENV=production yarn run build"
   },
   "bin": {
@@ -31,6 +34,7 @@
     "@babel/preset-env": "^7.3.4",
     "babel-plugin-dynamic-import-node": "^2.2.0",
     "cross-env": "^5.2.0",
+    "isml-linter": "^5.0.3",
     "yarn": "^1.13.0"
   },
   "dependencies": {
