@@ -9,49 +9,34 @@ const process = require("process");
 const uuid4 = require("uuid/v4");
 
 module.exports = async report => {
-    let osfLinterPath = path.resolve(process.cwd(), "osflinter.config.js");
-    if (!fse.existsSync(osfLinterPath)) {
-        console.error(`${chalk.red.bold("\u2716")} ${osfLinterPath} does not exist!`);
+    let osfLinterConfigPath = path.resolve(process.cwd(), "osflinter.config.js");
+    if (!fse.existsSync(osfLinterConfigPath)) {
+        console.error(`${chalk.red.bold("\u2716")} ${osfLinterConfigPath} does not exist!`);
         process.exit(1);
     }
 
-    let osfLinterConf;
+    let osfLinterConfig;
     try {
-        osfLinterConf = require(osfLinterPath);
+        osfLinterConfig = require(osfLinterConfigPath);
     } catch (e) {
-        console.error(`${chalk.red.bold("\u2716")} Failed to import ${osfLinterPath}!`);
+        console.error(`${chalk.red.bold("\u2716")} Failed to import ${osfLinterConfigPath}!`);
         console.error(e);
         process.exit(1);
     }
 
-    if (!osfLinterConf) {
-        console.error(`${chalk.red.bold("\u2716")} Failed to import ${osfLinterPath}!`);
+    if (!osfLinterConfig) {
+        console.error(`${chalk.red.bold("\u2716")} Failed to import ${osfLinterConfigPath}!`);
         process.exit(1);
     }
 
-    if (!osfLinterConf.eslintServer) {
-        console.error(`${chalk.red.bold("\u2716")} Missing eslintServer configuration from ${osfLinterPath}!`);
+    if (!osfLinterConfig.eslintServerPaths) {
+        console.error(`${chalk.red.bold("\u2716")} Missing eslintServerPaths configuration from ${osfLinterConfigPath}!`);
         process.exit(1);
-    }
-
-    if (!osfLinterConf.eslintServer.paths) {
-        console.error(`${chalk.red.bold("\u2716")} Missing eslintServer.paths configuration from ${osfLinterPath}!`);
-        process.exit(1);
-    }
-
-    let eslintServerPaths = [...osfLinterConf.eslintServer.paths];
-    let eslintServerConfig = {...config};
-
-    if (osfLinterConf.eslintServer.config) {
-        eslintServerConfig = {
-            ...config,
-            ...osfLinterConf.eslintServer.config
-        };
     }
 
     try {
-        let cli = new eslint.CLIEngine({baseConfig: eslintServerConfig, useEslintrc: false});
-        let files = await globby(eslintServerPaths);
+        let cli = new eslint.CLIEngine({baseConfig: config});
+        let files = await globby(osfLinterConfig.eslintServerPaths);
         let data = cli.executeOnFiles(files);
 
         if (data.errorCount > 0 || data.warningCount > 0) {

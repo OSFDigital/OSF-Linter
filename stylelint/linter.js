@@ -8,50 +8,35 @@ const stylelint = require("stylelint");
 const uuid4 = require("uuid/v4");
 
 module.exports = async report => {
-    let osfLinterPath = path.resolve(process.cwd(), "osflinter.config.js");
-    if (!fse.existsSync(osfLinterPath)) {
-        console.error(`${chalk.red.bold("\u2716")} ${osfLinterPath} does not exist!`);
+    let osfLinterConfigPath = path.resolve(process.cwd(), "osflinter.config.js");
+    if (!fse.existsSync(osfLinterConfigPath)) {
+        console.error(`${chalk.red.bold("\u2716")} ${osfLinterConfigPath} does not exist!`);
         process.exit(1);
     }
 
-    let osfLinterConf;
+    let osfLinterConfig;
     try {
-        osfLinterConf = require(osfLinterPath);
+        osfLinterConfig = require(osfLinterConfigPath);
     } catch (e) {
-        console.error(`${chalk.red.bold("\u2716")} Failed to import ${osfLinterPath}!`);
+        console.error(`${chalk.red.bold("\u2716")} Failed to import ${osfLinterConfigPath}!`);
         console.error(e);
         process.exit(1);
     }
 
-    if (!osfLinterConf) {
-        console.error(`${chalk.red.bold("\u2716")} Failed to import ${osfLinterPath}!`);
+    if (!osfLinterConfig) {
+        console.error(`${chalk.red.bold("\u2716")} Failed to import ${osfLinterConfigPath}!`);
         process.exit(1);
     }
 
-    if (!osfLinterConf.stylelint) {
-        console.error(`${chalk.red.bold("\u2716")} Missing stylelint configuration from ${osfLinterPath}!`);
+    if (!osfLinterConfig.stylelintPaths) {
+        console.error(`${chalk.red.bold("\u2716")} Missing stylelintPaths configuration from ${osfLinterConfigPath}!`);
         process.exit(1);
-    }
-
-    if (!osfLinterConf.stylelint.paths) {
-        console.error(`${chalk.red.bold("\u2716")} Missing stylelint.paths configuration from ${osfLinterPath}!`);
-        process.exit(1);
-    }
-
-    let stylelintPaths = [...osfLinterConf.stylelint.paths];
-    let stylelintConfig = {...config};
-
-    if (osfLinterConf.stylelint.config) {
-        stylelintConfig = {
-            ...config,
-            ...osfLinterConf.stylelint.config
-        };
     }
 
     try {
         let data = await stylelint.lint({
-            config: stylelintConfig,
-            files: stylelintPaths,
+            config: config,
+            files: osfLinterConfig.stylelintPaths,
             formatter: stylelint.formatters.verbose
         });
 
