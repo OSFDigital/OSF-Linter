@@ -29,6 +29,7 @@ let eslintClientConfig = {
     }
 };
 
+const fse = require("fs-extra");
 const path = require("path");
 const process = require("process");
 
