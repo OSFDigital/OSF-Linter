@@ -1,6 +1,5 @@
 let eslintClientConfig = {
     root: true,
-    useEslintrc: false,
     extends: "eslint:recommended",
     env: {
         browser: true,
