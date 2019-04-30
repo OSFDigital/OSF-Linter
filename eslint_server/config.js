@@ -34,6 +34,7 @@ let eslintServerConfig = {
     }
 };
 
+const chalk = require("chalk");
 const merge = require("deepmerge");
 const fse = require("fs-extra");
 const path = require("path");
