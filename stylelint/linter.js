@@ -33,10 +33,25 @@ module.exports = async report => {
         process.exit(1);
     }
 
+    if (!osfLinterConf.stylelint.paths) {
+        console.error(`${chalk.red.bold("\u2716")} Missing stylelint.paths configuration from ${osfLinterPath}!`);
+        process.exit(1);
+    }
+
+    let stylelintPaths = [...osfLinterConf.stylelint.paths];
+    let stylelintConfig = {...config};
+
+    if (osfLinterConf.stylelint.config) {
+        stylelintConfig = {
+            ...config,
+            ...osfLinterConf.stylelint.config
+        };
+    }
+
     try {
         let data = await stylelint.lint({
-            config: config,
-            files: osfLinterConf.stylelint,
+            config: stylelintConfig,
+            files: stylelintPaths,
             formatter: stylelint.formatters.verbose
         });
 

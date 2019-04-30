@@ -34,9 +34,24 @@ module.exports = async report => {
         process.exit(1);
     }
 
+    if (!osfLinterConf.eslintClient.paths) {
+        console.error(`${chalk.red.bold("\u2716")} Missing eslintClient.paths configuration from ${osfLinterPath}!`);
+        process.exit(1);
+    }
+
+    let eslintClientPaths = [...osfLinterConf.eslintClient.paths];
+    let eslintClientConfig = {...config};
+
+    if (osfLinterConf.eslintClient.config) {
+        eslintClientConfig = {
+            ...config,
+            ...osfLinterConf.eslintClient.config
+        };
+    }
+
     try {
-        let cli = new eslint.CLIEngine({baseConfig: config, useEslintrc: false});
-        let files = await globby(osfLinterConf.eslintClient);
+        let cli = new eslint.CLIEngine({baseConfig: eslintClientConfig, useEslintrc: false});
+        let files = await globby(eslintClientPaths);
         let data = cli.executeOnFiles(files);
 
         if (data.errorCount > 0 || data.warningCount > 0) {
