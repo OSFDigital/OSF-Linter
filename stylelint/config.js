@@ -36,6 +36,7 @@ let stylelintConfig = {
     }
 };
 
+const merge = require("deepmerge");
 const fse = require("fs-extra");
 const path = require("path");
 const process = require("process");
@@ -61,7 +62,7 @@ if (!osfLinterConfig) {
 }
 
 if (osfLinterConfig.stylelintConfig) {
-    stylelintConfig = { ...stylelintConfig, ...osfLinterConfig.stylelintConfig };
+    stylelintConfig = merge(stylelintConfig, osfLinterConfig.stylelintConfig);
 }
 
 module.exports = stylelintConfig;

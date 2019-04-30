@@ -35,6 +35,7 @@ let eslintServerConfig = {
     }
 };
 
+const merge = require("deepmerge");
 const fse = require("fs-extra");
 const path = require("path");
 const process = require("process");
@@ -60,7 +61,7 @@ if (!osfLinterConfig) {
 }
 
 if (osfLinterConfig.eslintServerConfig) {
-    eslintServerConfig = { ...eslintServerConfig, ...osfLinterConfig.eslintServerConfig };
+    eslintServerConfig = merge(eslintServerConfig, osfLinterConfig.eslintServerConfig);
 }
 
 module.exports = eslintServerConfig;

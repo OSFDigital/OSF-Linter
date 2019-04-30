@@ -1,6 +1,6 @@
 {
   "name": "@osf-global/linter",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "repository": "git@github.com:OSFGlobal/OSF-Linter.git",
   "author": "Daniel Anechitoaie <daniel.anechitoaie@osf-commerce.com>",
   "license": "MIT",
@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "chalk": "^2.4.2",
+    "deepmerge": "^3.2.0",
     "eslint": "^5.15.2",
     "fs-extra": "^7.0.1",
     "globby": "^9.1.0",
