@@ -32,7 +32,8 @@ let stylelintConfig = {
                 ignore: ["blockless-after-same-name-blockless", "inside-block"]
             }
         ],
-        "block-closing-brace-newline-after": ["always", { ignoreAtRules: ["if", "else"] }]
+        "block-closing-brace-newline-after": ["always", { ignoreAtRules: ["if", "else"] }],
+        "string-quotes" : ["double", { "avoidEscape" : false }]
     }
 };
 
