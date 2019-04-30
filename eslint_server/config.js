@@ -1,6 +1,5 @@
 let eslintServerConfig = {
     root: true,
-    useEslintrc: false,
     extends: "eslint:recommended",
     env: {
         commonjs: true
