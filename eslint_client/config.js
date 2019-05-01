@@ -20,6 +20,7 @@ let eslintClientConfig = {
         "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
         "prefer-const": "off",
         "prefer-spread": "off",
+        "comma-dangle": ["error", "never"],
         indent: ["error", 4, { SwitchCase: 1 }],
         quotes: ["error", "double"],
         radix: ["error", "always"],
