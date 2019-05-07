@@ -12,7 +12,10 @@ Edit your `package.json` file and add the following scripts:
 ```
 "lint:scss": "osf-linter --linter=stylelint",
 "lint:jsClient": "osf-linter --linter=eslintClient",
-"lint:jsServer": "osf-linter --linter=eslintServer"
+"lint:jsServer": "osf-linter --linter=eslintServer",
+"fix:scss": "stylelint --config stylelint.config.js --fix",
+"fix:jsClient": "eslint --config eslint.config.js --fix",
+"fix:jsServer": "eslint --config eslintServer.config.js --fix"
 ```
 
 For additional help messages you can also run `./node_modules/.bin/osf-linter --help`
