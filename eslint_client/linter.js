@@ -70,10 +70,20 @@ module.exports = async report => {
                                     messageType = "error";
                                 }
 
+                                let startLine = 0;
+                                if (message.line) {
+                                    startLine = message.line;
+                                }
+
+                                let endLine = 0;
+                                if (message.endLine) {
+                                    endLine = message.endLine;
+                                }
+
                                 return {
                                     path: relativePath,
-                                    start_line: message.line,
-                                    end_line: message.endLine,
+                                    start_line: startLine,
+                                    end_line: endLine,
                                     annotation_level: "failure",
                                     message: `[${messageType}] ${message.message} (${message.ruleId})`
                                 };

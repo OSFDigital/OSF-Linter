@@ -65,10 +65,20 @@ module.exports = async report => {
                                 .join("/");
 
                             return _.map(result.warnings, warning => {
+                                let startLine = 0;
+                                if (warning.line) {
+                                    startLine = warning.line;
+                                }
+
+                                let endLine = 0;
+                                if (warning.line) {
+                                    endLine = warning.line;
+                                }
+
                                 return {
                                     path: relativePath,
-                                    start_line: warning.line,
-                                    end_line: warning.line,
+                                    start_line: startLine,
+                                    end_line: endLine,
                                     annotation_level: "failure",
                                     message: `[${warning.severity}] ${warning.text}`
                                 };
