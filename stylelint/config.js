@@ -15,6 +15,7 @@ let stylelintConfig = {
                     "content",
                     "return",
                     "warn",
+                    "error",
                     "function"
                 ]
             }
