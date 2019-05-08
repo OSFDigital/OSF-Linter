@@ -66,12 +66,10 @@ module.exports = async report => {
 
                             return _.map(result.warnings, warning => {
                                 let startLine = 0;
+                                let endLine = 0;
+
                                 if (warning.line) {
                                     startLine = warning.line;
-                                }
-
-                                let endLine = 0;
-                                if (warning.line) {
                                     endLine = warning.line;
                                 }
 

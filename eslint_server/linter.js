@@ -71,12 +71,14 @@ module.exports = async report => {
                                 }
 
                                 let startLine = 0;
+                                let endLine = 0;
+
                                 if (message.line) {
                                     startLine = message.line;
+                                    endLine = message.line;
                                 }
 
-                                let endLine = 0;
-                                if (message.endLine) {
+                                if (message.endLine && message.endLine > startLine) {
                                     endLine = message.endLine;
                                 }
 
