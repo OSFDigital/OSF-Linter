@@ -6,10 +6,11 @@ const chalk = require("chalk");
 const eslintServer = require("../eslint_server/linter");
 const eslintClient = require("../eslint_client/linter");
 const stylelint = require("../stylelint/linter");
+const ismllint = require("../ismllint/linter");
 
 const argv = yargs
     .usage("Usage: $0 [options]")
-    .describe("l", "Linter type (eslintServer|eslintClient|stylelint)")
+    .describe("l", "Linter type (eslintServer|eslintClient|stylelint|ismllint)")
     .describe("r", "Report path")
     .demandOption(["l"])
     .alias("l", "linter")
@@ -30,6 +31,10 @@ switch (argv.l) {
 
     case "stylelint":
         stylelint(argv.r);
+        break;
+    
+    case "ismllint":
+        ismllint(argv.r);
         break;
 
     default:
