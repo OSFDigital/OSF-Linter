@@ -20,7 +20,7 @@
     "eslint": "^5.15.2",
     "fs-extra": "^7.0.1",
     "globby": "^9.1.0",
-    "isml-linter": "^5.5.1",
+    "isml-linter": "^5.6.0",
     "lodash": "^4.17.11",
     "stylelint": "^9.10.1",
     "stylelint-config-standard": "^18.2.0",
