@@ -67,3 +67,6 @@ module.exports = require("@osf-global/linter/stylelint/config");
 ```
 
 This will actually import the base config from `OSF Linter` and will also take care of merging it with your overwrides from `osflinter.config.js` and then, further, it should work as before.
+
+## Contributors
+See https://github.com/OSFGlobal/OSF-Linter/graphs/contributors for a list of people that contributed to this project
