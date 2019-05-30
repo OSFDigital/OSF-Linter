@@ -9,34 +9,34 @@ const process = require("process");
 const uuid4 = require("uuid/v4");
 
 module.exports = async report => {
-    let osfLinterPath = path.resolve(process.cwd(), "osflinter.config.js");
-    if (!fse.existsSync(osfLinterPath)) {
-        console.error(`${chalk.red.bold("\u2716")} ${osfLinterPath} does not exist!`);
+    let osfLinterConfigPath = path.resolve(process.cwd(), "osflinter.config.js");
+    if (!fse.existsSync(osfLinterConfigPath)) {
+        console.error(`${chalk.red.bold("\u2716")} ${osfLinterConfigPath} does not exist!`);
         process.exit(1);
     }
 
-    let osfLinterConf;
+    let osfLinterConfig;
     try {
-        osfLinterConf = require(osfLinterPath);
+        osfLinterConfig = require(osfLinterConfigPath);
     } catch (e) {
-        console.error(`${chalk.red.bold("\u2716")} Failed to import ${osfLinterPath}!`);
+        console.error(`${chalk.red.bold("\u2716")} Failed to import ${osfLinterConfigPath}!`);
         console.error(e);
         process.exit(1);
     }
 
-    if (!osfLinterConf) {
-        console.error(`${chalk.red.bold("\u2716")} Failed to import ${osfLinterPath}!`);
+    if (!osfLinterConfig) {
+        console.error(`${chalk.red.bold("\u2716")} Failed to import ${osfLinterConfigPath}!`);
         process.exit(1);
     }
 
-    if (!osfLinterConf.ismlLinter) {
-        console.error(`${chalk.red.bold("\u2716")} Missing isml linter configuration from ${osfLinterPath}!`);
+    if (!osfLinterConfig.ismllintPaths) {
+        console.error(`${chalk.red.bold("\u2716")} Missing ismllintPaths configuration from ${osfLinterConfigPath}!`);
         process.exit(1);
     }
-
+    
     try {
         ismllinter.setConfig(config);
-        let files = await globby(osfLinterConf.ismlLinter);
+        let files = await globby(osfLinterConfig.ismllintPaths);
         let data = ismllinter.parse(files);
 
         if (data.issueQty > 0 || data.warningCount > 0) {
@@ -48,7 +48,7 @@ module.exports = async report => {
                     fse.ensureDirSync(reportPath);
                 }
 
-                let reportFile = path.resolve(reportPath, `IsmlLinter.${uuid4()}.json`);
+                let reportFile = path.resolve(reportPath, `ISMLLint.${uuid4()}.json`);
                 if (fse.existsSync(reportFile)) {
                     console.error(`${chalk.red.bold("\u2716")} reportFile=${reportFile} already exists!`);
                     process.exit(1);
@@ -58,12 +58,9 @@ module.exports = async report => {
                     reportFile,
                     JSON.stringify(
                         _.flatMap(data.errors, result => {
-
                             for (let path in result) {
                                 if (result.hasOwnProperty(path)) {
-                                    const errorArray = result[path];
-
-                                    return errorArray.map( error => ({
+                                    return result[path].map( error => ({
                                         path: path,
                                         start_line: error.lineNumber,
                                         end_line: error.lineNumber,
