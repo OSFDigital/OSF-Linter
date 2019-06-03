@@ -1,14 +1,14 @@
-const _ = require("lodash");
-const chalk = require("chalk");
-const config = require("./config");
-const eslint = require("eslint");
-const fse = require("fs-extra");
-const globby = require("globby");
-const path = require("path");
-const process = require("process");
-const uuid4 = require("uuid/v4");
-
 module.exports = async report => {
+    const _ = require("lodash");
+    const chalk = require("chalk");
+    const config = require("./config");
+    const eslint = require("eslint");
+    const fse = require("fs-extra");
+    const globby = require("globby");
+    const path = require("path");
+    const process = require("process");
+    const uuid4 = require("uuid/v4");
+
     let osfLinterConfigPath = path.resolve(process.cwd(), "osflinter.config.js");
     if (!fse.existsSync(osfLinterConfigPath)) {
         console.error(`${chalk.red.bold("\u2716")} ${osfLinterConfigPath} does not exist!`);

@@ -1,14 +1,14 @@
-const _ = require("lodash");
-const chalk = require("chalk");
-const config = require("./config");
-const ismllinter = require("isml-linter");
-const fse = require("fs-extra");
-const globby = require("globby");
-const path = require("path");
-const process = require("process");
-const uuid4 = require("uuid/v4");
-
 module.exports = async report => {
+    const _ = require("lodash");
+    const chalk = require("chalk");
+    const config = require("./config");
+    const ismllinter = require("isml-linter");
+    const fse = require("fs-extra");
+    const globby = require("globby");
+    const path = require("path");
+    const process = require("process");
+    const uuid4 = require("uuid/v4");
+
     let osfLinterConfigPath = path.resolve(process.cwd(), "osflinter.config.js");
     if (!fse.existsSync(osfLinterConfigPath)) {
         console.error(`${chalk.red.bold("\u2716")} ${osfLinterConfigPath} does not exist!`);
@@ -33,7 +33,7 @@ module.exports = async report => {
         console.error(`${chalk.red.bold("\u2716")} Missing ismllintPaths configuration from ${osfLinterConfigPath}!`);
         process.exit(1);
     }
-    
+
     try {
         ismllinter.setConfig(config);
         let files = await globby(osfLinterConfig.ismllintPaths);
