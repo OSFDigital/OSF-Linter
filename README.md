@@ -1,7 +1,7 @@
 # OSF Linter
 
 ## Installation
-Make sure your NodeJS version is up to date, as requred in `package.json` in `engines` section. 
+Make sure your NodeJS version is up to date, as requred in `package.json` in `engines` section.
 
 Use NVM to be able to easely install and use any version of NodeJS you need (https://github.com/coreybutler/nvm-windows for Windows or https://github.com/nvm-sh/nvm for MacOS/Linux)
 
@@ -10,9 +10,10 @@ Run `yarn add --dev @osf-global/linter` if you use Yarn (recommended) or `npm in
 Edit your `package.json` file and add the following scripts:
 
 ```
-"lint:scss": "osf-linter --linter=stylelint",
-"lint:jsClient": "osf-linter --linter=eslintClient",
-"lint:jsServer": "osf-linter --linter=eslintServer",
+"lint:scss": "osf-linter --linter=SCSS",
+"lint:jsClient": "osf-linter --linter=JS_CLIENT",
+"lint:jsServer": "osf-linter --linter=JS_SERVER",
+"lint:isml": "osf-linter --linter=ISML",
 "fix:scss": "stylelint --config stylelint.config.js --fix",
 "fix:jsClient": "eslint --config eslint.config.js --fix",
 "fix:jsServer": "eslint --config eslintServer.config.js --fix"
@@ -26,15 +27,15 @@ To configure OSF Linter you will need to create a new file `osflinter.config.js`
 The contents of the `osflinter.config.js` should look like the bellow example, with each linter (see `./node_modules/.bin/osf-linter --help` for the available linters and thieir respective names) having a `...Paths` configuration, which is an array of path patterns used by the linter to check the files. See https://github.com/sindresorhus/globby#globbing-patterns for the syntax supported for the patterns.
 
 ```
-module.exports.stylelintPaths = [
+module.exports.SCSS_PATHS = [
     "cartridges/app_demo/cartridge/client/*/css/**/*.scss"
 ];
 
-module.exports.eslintClientPaths = [
+module.exports.JS_CLIENT_PATHS = [
     "cartridges/app_demo/cartridge/client/*/js/**/*.js"
 ];
 
-module.exports.eslintServerPaths = [
+module.exports.JS_SERVER_PATHS = [
 
 ];
 ```
@@ -46,7 +47,7 @@ To do so, you just need to add a new entry in `osflinter.config.js` and provide 
 Ex:
 
 ```
-module.exports.stylelintConfig = {
+module.exports.SCSS_CONFIG = {
     rules: {
         indentation: 2
     }
@@ -56,7 +57,7 @@ module.exports.stylelintConfig = {
 This would overwride the default rule of `4` spaces for indentation used by Stylelint and set it to `2`. You can do the same for the other linters also. See their documentatin pages for the available rulles/options and the format in which they are configured.
 
 ## Integration with code editors
-To integrate with the desired code editor just install the available plugins as usual. Those plugins will expect you to have a config file for each of the linters. 
+To integrate with the desired code editor just install the available plugins as usual. Those plugins will expect you to have a config file for each of the linters.
 
 For example if we take Stylelint again, the Stylelint plugin for VSCode will expect you to have a `stylelint.config.js` file at the root of your project (so next to `package.json`, `osflinter.config.js`, etc.).
 

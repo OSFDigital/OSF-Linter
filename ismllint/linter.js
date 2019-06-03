@@ -29,14 +29,14 @@ module.exports = async report => {
         process.exit(1);
     }
 
-    if (!osfLinterConfig.ismllintPaths) {
-        console.error(`${chalk.red.bold("\u2716")} Missing ismllintPaths configuration from ${osfLinterConfigPath}!`);
+    if (!osfLinterConfig.ISML_PATHS) {
+        console.error(`${chalk.red.bold("\u2716")} Missing ISML_PATHS configuration from ${osfLinterConfigPath}!`);
         process.exit(1);
     }
 
     try {
         ismllinter.setConfig(config);
-        let files = await globby(osfLinterConfig.ismllintPaths);
+        let files = await globby(osfLinterConfig.ISML_PATHS);
         let data = ismllinter.parse(files);
 
         if (data.issueQty > 0 || data.warningCount > 0) {

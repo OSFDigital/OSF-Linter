@@ -10,7 +10,7 @@ const ismllint = require("../ismllint/linter");
 
 const argv = yargs
     .usage("Usage: $0 [options]")
-    .describe("l", "Linter type (JS:SERVER|JS:CLIENT|SCSS|ISML)")
+    .describe("l", "Linter type (JS_SERVER|JS_CLIENT|SCSS|ISML)")
     .describe("r", "Report path")
     .demandOption(["l"])
     .alias("l", "linter")
@@ -21,11 +21,11 @@ const argv = yargs
     .argv;
 
 switch (argv.l) {
-    case "JS:SERVER":
+    case "JS_SERVER":
         eslintServer(argv.r);
         break;
 
-    case "JS:CLIENT":
+    case "JS_CLIENT":
         eslintClient(argv.r);
         break;
 
