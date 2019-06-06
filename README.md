@@ -38,6 +38,10 @@ module.exports.JS_CLIENT_PATHS = [
 module.exports.JS_SERVER_PATHS = [
 
 ];
+
+module.exports.ISML_PATHS = [
+
+];
 ```
 
 If needed (even tough not really recommended) you can also extend/customize the rules used by each of the supported linters.
