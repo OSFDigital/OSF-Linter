@@ -64,8 +64,8 @@ if (!osfLinterConfig) {
     process.exit(1);
 }
 
-if (osfLinterConfig.SCSS_CONFIG) {
-    stylelintConfig = merge(stylelintConfig, osfLinterConfig.SCSS_CONFIG);
+if (osfLinterConfig.scssConfig) {
+    stylelintConfig = merge(stylelintConfig, osfLinterConfig.scssConfig);
 }
 
 module.exports = stylelintConfig;

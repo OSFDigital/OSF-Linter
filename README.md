@@ -27,19 +27,19 @@ To configure OSF Linter you will need to create a new file `osflinter.config.js`
 The contents of the `osflinter.config.js` should look like the bellow example, with each linter (see `./node_modules/.bin/osf-linter --help` for the available linters and thieir respective names) having a `...Paths` configuration, which is an array of path patterns used by the linter to check the files. See https://github.com/sindresorhus/globby#globbing-patterns for the syntax supported for the patterns.
 
 ```
-module.exports.SCSS_PATHS = [
+module.exports.scssPaths = [
     "cartridges/app_demo/cartridge/client/*/css/**/*.scss"
 ];
 
-module.exports.JS_CLIENT_PATHS = [
+module.exports.jsClientPaths = [
     "cartridges/app_demo/cartridge/client/*/js/**/*.js"
 ];
 
-module.exports.JS_SERVER_PATHS = [
+module.exports.jsServerPaths = [
 
 ];
 
-module.exports.ISML_PATHS = [
+module.exports.ismlPaths = [
 
 ];
 ```
@@ -51,7 +51,7 @@ To do so, you just need to add a new entry in `osflinter.config.js` and provide 
 Ex:
 
 ```
-module.exports.SCSS_CONFIG = {
+module.exports.scssConfig = {
     rules: {
         indentation: 2
     }

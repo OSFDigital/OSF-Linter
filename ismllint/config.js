@@ -35,8 +35,8 @@ if (!osfLinterConfig) {
     process.exit(1);
 }
 
-if (osfLinterConfig.ISML_CONFIG) {
-    ismllintConfig = merge(ismllintConfig, osfLinterConfig.ISML_CONFIG);
+if (osfLinterConfig.ismlConfig) {
+    ismllintConfig = merge(ismllintConfig, osfLinterConfig.ismlConfig);
 }
 
 module.exports = ismllintConfig;

@@ -60,8 +60,8 @@ if (!osfLinterConfig) {
     process.exit(1);
 }
 
-if (osfLinterConfig.JS_SERVER_CONFIG) {
-    eslintServerConfig = merge(eslintServerConfig, osfLinterConfig.JS_SERVER_CONFIG);
+if (osfLinterConfig.jsServerConfig) {
+    eslintServerConfig = merge(eslintServerConfig, osfLinterConfig.jsServerConfig);
 }
 
 module.exports = eslintServerConfig;

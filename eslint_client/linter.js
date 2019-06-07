@@ -29,14 +29,14 @@ module.exports = async report => {
         process.exit(1);
     }
 
-    if (!osfLinterConfig.JS_CLIENT_PATHS) {
-        console.error(`${chalk.red.bold("\u2716")} Missing JS_CLIENT_PATHS configuration from ${osfLinterConfigPath}!`);
+    if (!osfLinterConfig.jsClientPaths) {
+        console.error(`${chalk.red.bold("\u2716")} Missing jsClientPaths configuration from ${osfLinterConfigPath}!`);
         process.exit(1);
     }
 
     try {
         let cli = new eslint.CLIEngine({baseConfig: config});
-        let files = await globby(osfLinterConfig.JS_CLIENT_PATHS);
+        let files = await globby(osfLinterConfig.jsClientPaths);
         let data = cli.executeOnFiles(files);
 
         if (data.errorCount > 0 || data.warningCount > 0) {

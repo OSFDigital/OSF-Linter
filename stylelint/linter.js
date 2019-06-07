@@ -28,15 +28,15 @@ module.exports = async report => {
         process.exit(1);
     }
 
-    if (!osfLinterConfig.SCSS_PATHS) {
-        console.error(`${chalk.red.bold("\u2716")} Missing SCSS_PATHS configuration from ${osfLinterConfigPath}!`);
+    if (!osfLinterConfig.scssPaths) {
+        console.error(`${chalk.red.bold("\u2716")} Missing scssPaths configuration from ${osfLinterConfigPath}!`);
         process.exit(1);
     }
 
     try {
         let data = await stylelint.lint({
             config: config,
-            files: osfLinterConfig.SCSS_PATHS,
+            files: osfLinterConfig.scssPaths,
             formatter: stylelint.formatters.verbose
         });
 
