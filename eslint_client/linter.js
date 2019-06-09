@@ -35,7 +35,11 @@ module.exports = async report => {
     }
 
     try {
-        let cli = new eslint.CLIEngine({baseConfig: config});
+        let cli = new eslint.CLIEngine({
+            baseConfig: config,
+            useEslintrc: false
+        });
+
         let files = await globby(osfLinterConfig.jsClientPaths);
         let data = cli.executeOnFiles(files);
 
