@@ -12,10 +12,10 @@ Edit your `package.json` file and add the following scripts:
 ```
 "lint:js": "osf-linter --linter=JS",
 "lint:scss": "osf-linter --linter=SCSS",
-"lint:isml": "osf-linter --linter=ISMl",
+"lint:isml": "osf-linter --linter=ISML",
 "fix:js": "osf-fixer --fixer=JS",
 "fix:scss": "osf-fixer --fixer=SCSS",
-"fix:isml": "osf-fixer --fixer=ISMl"
+"fix:isml": "osf-fixer --fixer=ISML"
 ```
 
 For additional help messages you can also run `./node_modules/.bin/osf-linter --help` or `./node_modules/.bin/osf-fixer --help`
