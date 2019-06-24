@@ -1,6 +1,5 @@
 module.exports = async report => {
     const _ = require("lodash");
-    const config = require("./config");
     const chalk = require("chalk");
     const fse = require("fs-extra");
     const path = require("path");
@@ -8,48 +7,23 @@ module.exports = async report => {
     const stylelint = require("stylelint");
     const uuid4 = require("uuid/v4");
 
-    let osfLinterConfigPath = path.resolve(process.cwd(), "osflinter.config.js");
-    if (!fse.existsSync(osfLinterConfigPath)) {
-        console.error(`${chalk.red.bold("\u2716")} ${osfLinterConfigPath} does not exist!`);
-        process.exit(1);
-    }
-
-    let osfLinterConfig;
     try {
-        osfLinterConfig = require(osfLinterConfigPath);
-    } catch (e) {
-        console.error(`${chalk.red.bold("\u2716")} Failed to import ${osfLinterConfigPath}!`);
-        console.error(e);
-        process.exit(1);
-    }
-
-    if (!osfLinterConfig) {
-        console.error(`${chalk.red.bold("\u2716")} Failed to import ${osfLinterConfigPath}!`);
-        process.exit(1);
-    }
-
-    if (!osfLinterConfig.scssPaths) {
-        console.error(`${chalk.red.bold("\u2716")} Missing scssPaths configuration from ${osfLinterConfigPath}!`);
-        process.exit(1);
-    }
-
-    try {
-        let data = await stylelint.lint({
-            config: config,
-            files: osfLinterConfig.scssPaths,
-            formatter: stylelint.formatters.verbose
-        });
+        const { getPaths } = require("../util");
+        const config = require("../config/.stylelintrc");
+        const files = getPaths("SCSS");
+        const formatter = stylelint.formatters.verbose;
+        const data = await stylelint.lint({ config, files, formatter });
 
         if (data.errored) {
             console.error(data.output);
 
             if (report) {
-                let reportPath = path.resolve(process.cwd(), report);
+                const reportPath = path.resolve(process.cwd(), report);
                 if (!fse.existsSync(reportPath)) {
                     fse.ensureDirSync(reportPath);
                 }
 
-                let reportFile = path.resolve(reportPath, `StyleLint.${uuid4()}.json`);
+                const reportFile = path.resolve(reportPath, `StyleLint.${uuid4()}.json`);
                 if (fse.existsSync(reportFile)) {
                     console.error(`${chalk.red.bold("\u2716")} reportFile=${reportFile} already exists!`);
                     process.exit(1);
@@ -59,7 +33,7 @@ module.exports = async report => {
                     reportFile,
                     JSON.stringify(
                         _.flatMap(data.results, result => {
-                            let relativePath = path
+                            const relativePath = path
                                 .relative(process.cwd(), result.source)
                                 .split(path.sep)
                                 .join("/");

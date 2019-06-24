@@ -1,7 +1,6 @@
 module.exports = async report => {
     const _ = require("lodash");
     const chalk = require("chalk");
-    const config = require("./config");
     const eslint = require("eslint");
     const fse = require("fs-extra");
     const globby = require("globby");
@@ -9,39 +8,13 @@ module.exports = async report => {
     const process = require("process");
     const uuid4 = require("uuid/v4");
 
-    let osfLinterConfigPath = path.resolve(process.cwd(), "osflinter.config.js");
-    if (!fse.existsSync(osfLinterConfigPath)) {
-        console.error(`${chalk.red.bold("\u2716")} ${osfLinterConfigPath} does not exist!`);
-        process.exit(1);
-    }
-
-    let osfLinterConfig;
     try {
-        osfLinterConfig = require(osfLinterConfigPath);
-    } catch (e) {
-        console.error(`${chalk.red.bold("\u2716")} Failed to import ${osfLinterConfigPath}!`);
-        console.error(e);
-        process.exit(1);
-    }
-
-    if (!osfLinterConfig) {
-        console.error(`${chalk.red.bold("\u2716")} Failed to import ${osfLinterConfigPath}!`);
-        process.exit(1);
-    }
-
-    if (!osfLinterConfig.jsClientPaths) {
-        console.error(`${chalk.red.bold("\u2716")} Missing jsClientPaths configuration from ${osfLinterConfigPath}!`);
-        process.exit(1);
-    }
-
-    try {
-        let cli = new eslint.CLIEngine({
-            baseConfig: config,
-            useEslintrc: false
-        });
-
-        let files = await globby(osfLinterConfig.jsClientPaths);
-        let data = cli.executeOnFiles(files);
+        const baseConfig = require("../config/.eslintrc");
+        const useEslintrc = false;
+        const cli = new eslint.CLIEngine({ baseConfig, useEslintrc });
+        const { getPaths } = require("../util");
+        const files = await globby(getPaths("JS"));
+        const data = cli.executeOnFiles(files);
 
         if (data.errorCount > 0 || data.warningCount > 0) {
             let formatter = cli.getFormatter("stylish");
@@ -102,7 +75,7 @@ module.exports = async report => {
             process.exit(1);
         }
     } catch (e) {
-        console.error(`${chalk.red.bold("\u2716")} Failed to run eslintClient!`);
+        console.error(`${chalk.red.bold("\u2716")} Failed to run eslint!`);
         console.error(e);
         process.exit(1);
     }

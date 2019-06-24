@@ -10,65 +10,70 @@ Run `yarn add --dev @osf-global/linter` if you use Yarn (recommended) or `npm in
 Edit your `package.json` file and add the following scripts:
 
 ```
+"lint:js": "osf-linter --linter=JS",
 "lint:scss": "osf-linter --linter=SCSS",
-"lint:jsClient": "osf-linter --linter=JS_CLIENT",
-"lint:jsServer": "osf-linter --linter=JS_SERVER",
-"lint:isml": "osf-linter --linter=ISML",
-"fix:scss": "stylelint --config stylelint.config.js --fix",
-"fix:jsClient": "eslint --config eslint.config.js --fix",
-"fix:jsServer": "eslint --config eslintServer.config.js --fix"
+"lint:isml": "osf-linter --linter=ISMl",
+"fix:js": "osf-fixer --fixer=JS",
+"fix:scss": "osf-fixer --fixer=SCSS",
+"fix:isml": "osf-fixer --fixer=ISMl"
 ```
 
-For additional help messages you can also run `./node_modules/.bin/osf-linter --help`
+For additional help messages you can also run `./node_modules/.bin/osf-linter --help` or `./node_modules/.bin/osf-fixer --help`
 
 ## Configuration
-To configure OSF Linter you will need to create a new file `osflinter.config.js` next to your `package.json` file which should be at the root of your repo/project (if best practices are followed).
+To configure OSF Linter and define the list of paths to be linted you will need to create a new file `osflinter.paths.js` next to your `package.json` file which should be at the root of your repo/project (if best practices are followed).
 
-The contents of the `osflinter.config.js` should look like the bellow example, with each linter (see `./node_modules/.bin/osf-linter --help` for the available linters and thieir respective names) having a `...Paths` configuration, which is an array of path patterns used by the linter to check the files. See https://github.com/sindresorhus/globby#globbing-patterns for the syntax supported for the patterns.
+The contents of the `osflinter.paths.js` should look like the bellow example, with each linter (see `./node_modules/.bin/osf-linter --help` for the available linters and thieir respective names) exporting an array of path patterns used by the linter to check the files. See https://github.com/sindresorhus/globby#globbing-patterns for the syntax supported for the patterns.
 
 ```
-module.exports.scssPaths = [
+module.exports.JS = [
+    "cartridges/app_demo/**/*.js"
+];
+
+module.exports.SCSS = [
     "cartridges/app_demo/cartridge/client/*/css/**/*.scss"
 ];
 
-module.exports.jsClientPaths = [
-    "cartridges/app_demo/cartridge/client/*/js/**/*.js"
-];
-
-module.exports.jsServerPaths = [
-
-];
-
-module.exports.ismlPaths = [
-
+module.exports.ISML = [
+    "cartridges/app_demo/cartridge/templates/**/*.isml"
 ];
 ```
 
 If needed (even tough not really recommended) you can also extend/customize the rules used by each of the supported linters.
 
-To do so, you just need to add a new entry in `osflinter.config.js` and provide a `...Config` for each linter you want to customize.
+To do so, you just need to create a new file `osflinter.config.js` next to your `package.json` file which should be at the root of your repo/project with each linter (see `./node_modules/.bin/osf-linter --help` for the available linters and thieir respective names) exporting a configuration object.
 
 Ex:
 
 ```
-module.exports.scssConfig = {
-    rules: {
-        indentation: 2
-    }
+module.exports.JS = {
+    ...
+};
+
+module.exports.SCSS = {
+    ...
+};
+
+module.exports.ISML = {
+    ...
 };
 ```
-
-This would overwride the default rule of `4` spaces for indentation used by Stylelint and set it to `2`. You can do the same for the other linters also. See their documentatin pages for the available rulles/options and the format in which they are configured.
 
 ## Integration with code editors
 To integrate with the desired code editor just install the available plugins as usual. Those plugins will expect you to have a config file for each of the linters.
 
-For example if we take Stylelint again, the Stylelint plugin for VSCode will expect you to have a `stylelint.config.js` file at the root of your project (so next to `package.json`, `osflinter.config.js`, etc.).
+For example if we take Stylelint again, the Stylelint plugin for VSCode will expect you to have a `.stylelintrc.js` file at the root of your project (so next to `package.json`, `osflinter.config.js`, etc.).
 
-So, to make it work just go ahead and create the `stylelint.config.js`. The only difference is that before you would have the rules here, directly in this file. Now since you use the `OSF Linter` tool, all you need to do is paste the following into `stylelint.config.js` file:
+So, to make it work just go ahead and create the `.stylelintrc.js`. The only difference is that before you would have the rules here, directly in this file. Now since you use the `OSF Linter` tool, all you need to do is paste the following into `.stylelintrc.js` file:
 
 ```
-module.exports = require("@osf-global/linter/stylelint/config");
+module.exports = require("@osf-global/linter/config/.stylelintrc");
+```
+
+For ESLint you can do the same thing except the file you need to create will be ``.eslintrc.js` and its contents will be:
+
+```
+module.exports = require("@osf-global/linter/config/.eslintrc");
 ```
 
 This will actually import the base config from `OSF Linter` and will also take care of merging it with your overwrides from `osflinter.config.js` and then, further, it should work as before.

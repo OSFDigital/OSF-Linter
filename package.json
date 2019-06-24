@@ -1,6 +1,6 @@
 {
   "name": "@osf-global/linter",
-  "version": "1.3.1",
+  "version": "2.0.0",
   "repository": "git@github.com:OSFGlobal/OSF-Linter.git",
   "author": "Daniel Anechitoaie <daniel.anechitoaie@osf-commerce.com>",
   "license": "MIT",
@@ -9,26 +9,24 @@
   },
   "main": "index.js",
   "engines": {
-    "node": ">=10.15.3"
+    "node": ">=10.0.0"
   },
   "bin": {
-    "osf-linter": "./bin/osf-linter.js"
+    "osf-linter": "./bin/osf-linter.js",
+    "osf-fixer": "./bin/osf-fixer.js"
   },
   "dependencies": {
     "chalk": "^2.4.2",
-    "deepmerge": "^3.2.0",
-    "eslint": "^5.15.2",
-    "fs-extra": "^7.0.1",
-    "globby": "^9.1.0",
-    "isml-linter": "^5.6.0",
+    "deepmerge": "^3.3.0",
+    "eslint": "^6.0.0",
+    "fs-extra": "^8.0.1",
+    "globby": "^9.2.0",
+    "isml-linter": "^5.10.0",
     "lodash": "^4.17.11",
-    "stylelint": "^9.10.1",
-    "stylelint-config-standard": "^18.2.0",
-    "stylelint-scss": "^3.5.4",
+    "stylelint": "^10.1.0",
+    "stylelint-config-standard": "^18.3.0",
+    "stylelint-scss": "^3.8.0",
     "uuid": "^3.3.2",
-    "yargs": "^13.2.2"
-  },
-  "devDependencies": {
-    "prettier": "^1.18.2"
+    "yargs": "^13.2.4"
   }
 }

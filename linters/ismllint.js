@@ -1,43 +1,20 @@
 module.exports = async report => {
     const _ = require("lodash");
     const chalk = require("chalk");
-    const config = require("./config");
-    const ismllinter = require("isml-linter");
     const fse = require("fs-extra");
     const globby = require("globby");
+    const ismllinter = require("isml-linter");
     const path = require("path");
     const process = require("process");
     const uuid4 = require("uuid/v4");
 
-    let osfLinterConfigPath = path.resolve(process.cwd(), "osflinter.config.js");
-    if (!fse.existsSync(osfLinterConfigPath)) {
-        console.error(`${chalk.red.bold("\u2716")} ${osfLinterConfigPath} does not exist!`);
-        process.exit(1);
-    }
-
-    let osfLinterConfig;
     try {
-        osfLinterConfig = require(osfLinterConfigPath);
-    } catch (e) {
-        console.error(`${chalk.red.bold("\u2716")} Failed to import ${osfLinterConfigPath}!`);
-        console.error(e);
-        process.exit(1);
-    }
-
-    if (!osfLinterConfig) {
-        console.error(`${chalk.red.bold("\u2716")} Failed to import ${osfLinterConfigPath}!`);
-        process.exit(1);
-    }
-
-    if (!osfLinterConfig.ismlPaths) {
-        console.error(`${chalk.red.bold("\u2716")} Missing ismlPaths configuration from ${osfLinterConfigPath}!`);
-        process.exit(1);
-    }
-
-    try {
+        const config = require("../config/.ismllintrc");
         ismllinter.setConfig(config);
-        let files = await globby(osfLinterConfig.ismlPaths);
-        let data = ismllinter.parse(files);
+
+        const { getPaths } = require("../util");
+        const files = await globby(getPaths("ISML"));
+        const data = ismllinter.parse(files);
 
         if (data.issueQty > 0 || data.warningCount > 0) {
             ismllinter.printResults();
@@ -60,7 +37,7 @@ module.exports = async report => {
                         _.flatMap(data.errors, result => {
                             for (let path in result) {
                                 if (result.hasOwnProperty(path)) {
-                                    return result[path].map( error => ({
+                                    return result[path].map(error => ({
                                         path: path,
                                         start_line: error.lineNumber,
                                         end_line: error.lineNumber,
@@ -77,7 +54,7 @@ module.exports = async report => {
             process.exit(1);
         }
     } catch (e) {
-        console.error(`${chalk.red.bold("\u2716")} Failed to run isml linter!`);
+        console.error(`${chalk.red.bold("\u2716")} Failed to run ismllint!`);
         console.error(e);
         process.exit(1);
     }

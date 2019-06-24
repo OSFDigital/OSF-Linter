@@ -1,43 +1,37 @@
 #!/usr/bin/env node
 
-const process = require("process");
 const yargs = require("yargs");
-const chalk = require("chalk");
-const eslintServer = require("../eslint_server/linter");
-const eslintClient = require("../eslint_client/linter");
-const stylelint = require("../stylelint/linter");
-const ismllint = require("../ismllint/linter");
-
 const argv = yargs
     .usage("Usage: $0 [options]")
-    .describe("l", "Linter type (JS_SERVER|JS_CLIENT|SCSS|ISML)")
+    .describe("l", "Linter type (JS|SCSS|ISML)")
     .describe("r", "Report path")
     .demandOption(["l"])
     .alias("l", "linter")
     .alias("r", "report")
     .alias("v", "version")
     .alias("h", "help")
-    .help("h")
-    .argv;
+    .help("h").argv;
 
 switch (argv.l) {
-    case "JS_SERVER":
-        eslintServer(argv.r);
-        break;
-
-    case "JS_CLIENT":
-        eslintClient(argv.r);
+    case "JS":
+        const lintWithESLint = require("../linters/eslint");
+        lintWithESLint(argv.r);
         break;
 
     case "SCSS":
-        stylelint(argv.r);
+        const lintWithStyleLint = require("../linters/stylelint");
+        lintWithStyleLint(argv.r);
         break;
 
     case "ISML":
-        ismllint(argv.r);
+        const lintWithISMLLint = require("../linters/ismllint");
+        lintWithISMLLint(argv.r);
         break;
 
     default:
+        const chalk = require("chalk");
         console.error(`${chalk.red.bold("\u2716")} Invalid value for linter type!`);
+
+        const process = require("process");
         process.exit(1);
 }
