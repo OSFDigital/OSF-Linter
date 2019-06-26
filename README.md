@@ -70,7 +70,7 @@ So, to make it work just go ahead and create the `.stylelintrc.js`. The only dif
 module.exports = require("@osf-global/linter/config/.stylelintrc");
 ```
 
-For ESLint you can do the same thing except the file you need to create will be ``.eslintrc.js` and its contents will be:
+For ESLint you can do the same thing except the file you need to create will be `.eslintrc.js` and its contents will be:
 
 ```
 module.exports = require("@osf-global/linter/config/.eslintrc");
