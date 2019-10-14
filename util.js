@@ -32,33 +32,62 @@ module.exports.getPaths = name => {
     return osfLinterPathsObj[name];
 };
 
-module.exports.getConfig = (name, defaultConfig) => {
+module.exports.getESLintConfig = () => {
     const chalk = require("chalk");
     const fse = require("fs-extra");
-    const merge = require("deepmerge");
     const path = require("path");
     const process = require("process");
 
-    let osfLinterConfigPath = path.resolve(process.cwd(), "osflinter.config.js");
-    if (fse.existsSync(osfLinterConfigPath)) {
-        let osfLinterConfigObj;
+    let esLintRCPath = path.resolve(process.cwd(), ".eslintrc");
+    if (fse.existsSync(esLintRCPath)) {
         try {
-            osfLinterConfigObj = require(osfLinterConfigPath);
+            return require(esLintRCPath);
         } catch (e) {
-            console.error(`${chalk.red.bold("\u2716")} Failed to import ${osfLinterConfigPath}!`);
+            console.error(`${chalk.red.bold("\u2716")} Failed to import ${esLintRCPath}!`);
             console.error(e);
             process.exit(1);
         }
+    }
 
-        if (!osfLinterConfigObj) {
-            console.error(`${chalk.red.bold("\u2716")} Failed to import ${osfLinterConfigPath}!`);
+    return require("./config/.eslintrc");
+};
+
+module.exports.getStyleLintConfig = () => {
+    const chalk = require("chalk");
+    const fse = require("fs-extra");
+    const path = require("path");
+    const process = require("process");
+
+    let styleLintRCPath = path.resolve(process.cwd(), ".stylelintrc");
+    if (fse.existsSync(styleLintRCPath)) {
+        try {
+            return require(styleLintRCPath);
+        } catch (e) {
+            console.error(`${chalk.red.bold("\u2716")} Failed to import ${styleLintRCPath}!`);
+            console.error(e);
             process.exit(1);
-        }
-
-        if (osfLinterConfigObj[name]) {
-            return merge(defaultConfig, osfLinterConfigObj[name]);
         }
     }
 
-    return defaultConfig;
+    return require("./config/.stylelintrc");
+};
+
+module.exports.getISMLLintConfig = () => {
+    const chalk = require("chalk");
+    const fse = require("fs-extra");
+    const path = require("path");
+    const process = require("process");
+
+    let ismlLintRCPath = path.resolve(process.cwd(), ".ismllintrc");
+    if (fse.existsSync(ismlLintRCPath)) {
+        try {
+            return require(ismlLintRCPath);
+        } catch (e) {
+            console.error(`${chalk.red.bold("\u2716")} Failed to import ${ismlLintRCPath}!`);
+            console.error(e);
+            process.exit(1);
+        }
+    }
+
+    return require("./config/.ismllintrc");
 };

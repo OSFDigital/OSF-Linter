@@ -1,4 +1,4 @@
-const defaultConfig = {
+module.exports = {
     extends: "stylelint-config-standard",
     plugins: ["stylelint-scss"],
     rules: {
@@ -34,10 +34,6 @@ const defaultConfig = {
             }
         ],
         "block-closing-brace-newline-after": ["always", { ignoreAtRules: ["if", "else"] }],
-        "string-quotes" : ["double", { "avoidEscape" : false }]
+        "string-quotes": ["double", { avoidEscape: false }]
     }
 };
-
-
-const { getConfig } = require("../util");
-module.exports = getConfig("SCSS", defaultConfig);

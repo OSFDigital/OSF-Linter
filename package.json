@@ -1,6 +1,6 @@
 {
   "name": "@osf-global/linter",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "repository": "git@github.com:OSFGlobal/OSF-Linter.git",
   "author": "Daniel Anechitoaie <daniel.anechitoaie@osf-commerce.com>",
   "license": "MIT",

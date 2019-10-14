@@ -9,11 +9,11 @@ module.exports = async report => {
     const uuid4 = require("uuid/v4");
 
     try {
-        const config = require("../config/.ismllintrc");
-        ismllinter.setConfig(config);
-
-        const { getPaths } = require("../util");
+        const { getPaths, getISMLLintConfig } = require("../util");
+        const config = getISMLLintConfig();
         const files = await globby(getPaths("ISML"));
+
+        ismllinter.setConfig(config);
         const data = ismllinter.parse(files);
 
         if (data.issueQty > 0 || data.warningCount > 0) {

@@ -5,12 +5,13 @@ module.exports = async () => {
     const process = require("process");
 
     try {
-        const baseConfig = require("../config/.eslintrc");
+        const { getPaths, getESLintConfig } = require("../util");
+        const baseConfig = getESLintConfig();
+        const files = await globby(getPaths("JS"));
+
         const useEslintrc = false;
         const fix = true;
         const cli = new eslint.CLIEngine({ baseConfig, useEslintrc, fix });
-        const { getPaths } = require("../util");
-        const files = await globby(getPaths("JS"));
         const data = cli.executeOnFiles(files);
         eslint.CLIEngine.outputFixes(data);
 

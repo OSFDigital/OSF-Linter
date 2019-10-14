@@ -4,9 +4,10 @@ module.exports = async () => {
     const stylelint = require("stylelint");
 
     try {
-        const { getPaths } = require("../util");
-        const config = require("../config/.stylelintrc");
+        const { getPaths, getStyleLintConfig } = require("../util");
+        const config = getStyleLintConfig();
         const files = getPaths("SCSS");
+
         const formatter = stylelint.formatters.verbose;
         const fix = true;
         const data = await stylelint.lint({ config, files, formatter, fix });

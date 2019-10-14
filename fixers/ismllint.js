@@ -6,12 +6,11 @@ module.exports = async () => {
     const process = require("process");
 
     try {
-        const defaultConfig = require("../config/.ismllintrc");
-        const configWithFix = merge(defaultConfig, { autoFix: true });
-        ismllinter.setConfig(configWithFix);
-
-        const { getPaths } = require("../util");
+        const { getPaths, getISMLLintConfig } = require("../util");
+        const config = merge(getISMLLintConfig(), { autoFix: true });
         const files = await globby(getPaths("ISML"));
+
+        ismllinter.setConfig(config);
         const data = ismllinter.parse(files);
 
         if (data.issueQty > 0 || data.warningCount > 0) {

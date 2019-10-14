@@ -9,11 +9,12 @@ module.exports = async report => {
     const uuid4 = require("uuid/v4");
 
     try {
-        const baseConfig = require("../config/.eslintrc");
+        const { getPaths, getESLintConfig } = require("../util");
+        const baseConfig = getESLintConfig();
+        const files = await globby(getPaths("JS"));
+
         const useEslintrc = false;
         const cli = new eslint.CLIEngine({ baseConfig, useEslintrc });
-        const { getPaths } = require("../util");
-        const files = await globby(getPaths("JS"));
         const data = cli.executeOnFiles(files);
 
         if (data.errorCount > 0 || data.warningCount > 0) {

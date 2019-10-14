@@ -1,4 +1,4 @@
-const defaultConfig = {
+module.exports = {
     rules: {
         // Line by line rules;
         "enforce-isprint": {},
@@ -21,6 +21,3 @@ const defaultConfig = {
         "one-element-per-line": {}
     }
 };
-
-const { getConfig } = require("../util");
-module.exports = getConfig("ISML", defaultConfig);

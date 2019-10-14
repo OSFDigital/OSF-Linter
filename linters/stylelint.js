@@ -8,9 +8,10 @@ module.exports = async report => {
     const uuid4 = require("uuid/v4");
 
     try {
-        const { getPaths } = require("../util");
-        const config = require("../config/.stylelintrc");
+        const { getPaths, getStyleLintConfig } = require("../util");
+        const config = getStyleLintConfig();
         const files = getPaths("SCSS");
+
         const formatter = stylelint.formatters.verbose;
         const data = await stylelint.lint({ config, files, formatter });
 
