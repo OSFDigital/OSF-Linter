@@ -39,44 +39,56 @@ module.exports.ISML = [
 ];
 ```
 
-If needed (even tough not really recommended) you can also extend/customize the rules used by each of the supported linters.
 
-To do so, you just need to create a new file `osflinter.config.js` next to your `package.json` file which should be at the root of your repo/project with each linter (see `./node_modules/.bin/osf-linter --help` for the available linters and thieir respective names) exporting a configuration object.
+## Next you need to create these three new files next to your `package.json` file which should be at the root of your repo/project:
 
-Ex:
-
-```
-module.exports.JS = {
-    ...
-};
-
-module.exports.SCSS = {
-    ...
-};
-
-module.exports.ISML = {
-    ...
-};
-```
-
-## Integration with code editors
-To integrate with the desired code editor just install the available plugins as usual. Those plugins will expect you to have a config file for each of the linters.
-
-For example if we take Stylelint again, the Stylelint plugin for VSCode will expect you to have a `.stylelintrc.js` file at the root of your project (so next to `package.json`, `osflinter.config.js`, etc.).
-
-So, to make it work just go ahead and create the `.stylelintrc.js`. The only difference is that before you would have the rules here, directly in this file. Now since you use the `OSF Linter` tool, all you need to do is paste the following into `.stylelintrc.js` file:
-
-```
-module.exports = require("@osf-global/linter/config/.stylelintrc");
-```
-
-For ESLint you can do the same thing except the file you need to create will be `.eslintrc.js` and its contents will be:
+### `.eslintrc.js` with the following contents:
 
 ```
 module.exports = require("@osf-global/linter/config/.eslintrc");
 ```
 
-This will actually import the base config from `OSF Linter` and will also take care of merging it with your overwrides from `osflinter.config.js` and then, further, it should work as before.
+If you want to customize the default rules you can do that by either setting the specific properties that you want directly on the `module.exports` object or by using a variable that you then reexport.
+
+Ex:
+```
+module.exports = require("@osf-global/linter/config/.eslintrc");
+
+# Using single quotes
+module.exports.rules.quotes = ["error", "single"];
+```
+
+### `.stylelintrc.js` with the following contents:
+
+```
+module.exports = require("@osf-global/linter/config/.stylelintrc");
+```
+
+If you want to customize the default rules you can do that by either setting the specific properties that you want directly on the `module.exports` object or by using a variable that you then reexport.
+
+Ex:
+```
+module.exports = require("@osf-global/linter/config/.stylelintrc");
+
+# Using two spaces for indentation
+module.exports.rules.indentation = 2;
+```
+
+### `.ismllintrc.js` with the following contents:
+
+```
+module.exports = require("@osf-global/linter/config/.ismllintrc");
+```
+
+If you want to customize the default rules you can do that by either setting the specific properties that you want directly on the `module.exports` object or by using a variable that you then reexport.
+
+Ex:
+```
+module.exports = require("@osf-global/linter/config/.ismllintrc");
+
+# Using two spaces for indentation
+module.exports.rules.indent = {value: 2};
+```
 
 ## Contributors
 See https://github.com/OSFGlobal/OSF-Linter/graphs/contributors for a list of people that contributed to this project
