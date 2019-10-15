@@ -7,7 +7,9 @@ module.exports = {
         es6: true,
         jquery: true
     },
-    globals: {},
+    globals: {
+        __webpack_public_path__: true
+    },
     parser: "babel-eslint",
     parserOptions: {
         sourceType: "module",
