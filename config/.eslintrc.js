@@ -8,6 +8,12 @@ module.exports = {
         jquery: true
     },
     globals: {},
+    parser: "babel-eslint",
+    parserOptions: {
+        sourceType: "module",
+        allowImportExportEverywhere: false,
+        codeFrame: false
+    },
     rules: {
         "array-bracket-spacing": ["error", "never"],
         "comma-spacing": ["error", { before: false, after: true }],
@@ -28,7 +34,6 @@ module.exports = {
         semi: ["error", "always"],
         "space-before-blocks": ["error", "always"],
         "space-before-function-paren": ["error", { anonymous: "always", named: "never", asyncArrow: "always" }],
-        "space-in-parens": ["error", "never"],
-        strict: ["error", "global"]
+        "space-in-parens": ["error", "never"]
     }
 };
