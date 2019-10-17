@@ -58,6 +58,37 @@ module.exports = require("@osf-global/linter/config/.eslintrc");
 module.exports.rules.quotes = ["error", "single"];
 ```
 
+A good example is adding support of ES6 for your client side code.
+
+Ex:
+```
+module.exports = require("@osf-global/linter/config/.eslintrc");
+
+# Adding support for ES6 code in the client folder for your cartridge
+module.exports.overrides = [
+    {
+        files: [
+            "cartridges/*/cartridge/client/*/js/**/*.js"
+        ],
+        parserOptions: {
+            ecmaVersion: 6,
+            sourceType: "module",
+            allowImportExportEverywhere: false
+        },
+        env: {
+            browser: true,
+            commonjs: true,
+            es6: true,
+            jquery: true
+        },
+        globals: {
+            __webpack_public_path__: true
+        }
+    }
+];
+```
+
+
 ### `.stylelintrc.js` with the following contents:
 
 ```

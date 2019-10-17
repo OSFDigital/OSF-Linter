@@ -2,18 +2,11 @@ module.exports = {
     root: true,
     extends: "eslint:recommended",
     env: {
-        browser: true,
         commonjs: true,
-        es6: true,
-        jquery: true
+        es6: true
     },
     globals: {},
     parser: "babel-eslint",
-    parserOptions: {
-        sourceType: "module",
-        allowImportExportEverywhere: false,
-        codeFrame: false
-    },
     rules: {
         "array-bracket-spacing": ["error", "never"],
         "comma-spacing": ["error", { before: false, after: true }],
@@ -34,6 +27,7 @@ module.exports = {
         semi: ["error", "always"],
         "space-before-blocks": ["error", "always"],
         "space-before-function-paren": ["error", { anonymous: "always", named: "never", asyncArrow: "always" }],
-        "space-in-parens": ["error", "never"]
+        "space-in-parens": ["error", "never"],
+        strict: ["error", "global"]
     }
 };
