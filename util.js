@@ -38,7 +38,7 @@ module.exports.getESLintConfig = () => {
     const path = require("path");
     const process = require("process");
 
-    let esLintRCPath = path.resolve(process.cwd(), ".eslintrc");
+    let esLintRCPath = path.resolve(process.cwd(), ".eslintrc.js");
     if (fse.existsSync(esLintRCPath)) {
         try {
             return require(esLintRCPath);
@@ -49,7 +49,7 @@ module.exports.getESLintConfig = () => {
         }
     }
 
-    return require("./config/.eslintrc");
+    return require("./config/.eslintrc.js");
 };
 
 module.exports.getStyleLintConfig = () => {
@@ -58,7 +58,7 @@ module.exports.getStyleLintConfig = () => {
     const path = require("path");
     const process = require("process");
 
-    let styleLintRCPath = path.resolve(process.cwd(), ".stylelintrc");
+    let styleLintRCPath = path.resolve(process.cwd(), ".stylelintrc.js");
     if (fse.existsSync(styleLintRCPath)) {
         try {
             return require(styleLintRCPath);
@@ -69,7 +69,7 @@ module.exports.getStyleLintConfig = () => {
         }
     }
 
-    return require("./config/.stylelintrc");
+    return require("./config/.stylelintrc.js");
 };
 
 module.exports.getISMLLintConfig = () => {
@@ -78,7 +78,7 @@ module.exports.getISMLLintConfig = () => {
     const path = require("path");
     const process = require("process");
 
-    let ismlLintRCPath = path.resolve(process.cwd(), ".ismllintrc");
+    let ismlLintRCPath = path.resolve(process.cwd(), ".ismllintrc.js");
     if (fse.existsSync(ismlLintRCPath)) {
         try {
             return require(ismlLintRCPath);
@@ -89,5 +89,5 @@ module.exports.getISMLLintConfig = () => {
         }
     }
 
-    return require("./config/.ismllintrc");
+    return require("./config/.ismllintrc.js");
 };
