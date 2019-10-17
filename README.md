@@ -68,18 +68,21 @@ module.exports = require("@osf-global/linter/config/.eslintrc");
 module.exports.overrides = [
     {
         files: [
-            "cartridges/*/cartridge/client/default/js/**/*.js"
+            "cartridges/*/cartridge/client/*/js/**/*.js"
         ],
+        parserOptions: {
+            ecmaVersion: 6,
+            sourceType: "module",
+            allowImportExportEverywhere: false
+        },
         env: {
             browser: true,
             commonjs: true,
             es6: true,
             jquery: true
         },
-        parserOptions: {
-            ecmaVersion: 6,
-            sourceType: "module",
-            allowImportExportEverywhere: false
+        globals: {
+            __webpack_public_path__: true
         }
     }
 ];
