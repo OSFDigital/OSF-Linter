@@ -6,7 +6,6 @@ module.exports = {
         es6: true
     },
     globals: {},
-    parser: "babel-eslint",
     rules: {
         "array-bracket-spacing": ["error", "never"],
         "comma-spacing": ["error", { before: false, after: true }],

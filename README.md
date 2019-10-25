@@ -58,18 +58,32 @@ module.exports = require("@osf-global/linter/config/.eslintrc");
 module.exports.rules.quotes = ["error", "single"];
 ```
 
-A good example is adding support of ES6 for your client side code.
+A good example is setting up default SFCC globals and adding support of ES6 for your client side code.
 
 Ex:
 ```
 module.exports = require("@osf-global/linter/config/.eslintrc");
-
-# Adding support for ES6 code in the client folder for your cartridge
 module.exports.overrides = [
+    // Setting up default SFCC globals
     {
-        files: [
-            "cartridges/*/cartridge/client/*/js/**/*.js"
-        ],
+        files: ["cartridges/*/cartridge/{controllers,models,scripts}/**/*.js"],
+        globals: {
+            dw: true,
+            customer: true,
+            session: true,
+            request: true,
+            response: true,
+            empty: true,
+            PIPELET_ERROR: true,
+            PIPELET_NEXT: true,
+            webreferences: true
+        }
+    },
+
+    // Adding support for ES6 code in the client folder for your cartridge
+    {
+        files: ["cartridges/*/cartridge/client/*/js/**/*.js"],
+        parser: "babel-eslint",
         parserOptions: {
             ecmaVersion: 6,
             sourceType: "module",
