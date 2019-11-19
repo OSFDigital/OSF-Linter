@@ -1,4 +1,5 @@
 # NodeJS
+/package-lock.json
 /node_modules/
 
 # VS Code

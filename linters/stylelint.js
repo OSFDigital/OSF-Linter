@@ -1,12 +1,45 @@
-module.exports = async report => {
-    const _ = require("lodash");
-    const chalk = require("chalk");
-    const fse = require("fs-extra");
-    const path = require("path");
-    const process = require("process");
-    const stylelint = require("stylelint");
-    const uuid4 = require("uuid/v4");
+const chalk = require("chalk");
+const fse = require("fs-extra");
+const path = require("path");
+const process = require("process");
+const stylelint = require("stylelint");
+const uuid4 = require("uuid/v4");
+const _flatMap = require("lodash/flatMap");
+const _map = require("lodash/map");
+const _replace = require("lodash/replace");
 
+function getAnnotations(annotationsData, annotationsPrefix) {
+    return _flatMap(annotationsData, result => {
+        let relativePath = path
+            .relative(process.cwd(), result.source)
+            .split(path.sep)
+            .join("/");
+
+        if (annotationsPrefix) {
+            relativePath = `${annotationsPrefix}${relativePath}`;
+        }
+
+        return _map(result.warnings, warning => {
+            let startLine = 0;
+            let endLine = 0;
+
+            if (warning.line) {
+                startLine = warning.line;
+                endLine = warning.line;
+            }
+
+            return {
+                path: relativePath,
+                start_line: startLine,
+                end_line: endLine,
+                annotation_level: "failure",
+                message: warning.text
+            };
+        });
+    });
+}
+
+module.exports = async ({ annotationsType, annotationsPath, annotationsPrefix }) => {
     try {
         const { getPaths, getStyleLintConfig } = require("../util");
         const config = getStyleLintConfig();
@@ -18,47 +51,31 @@ module.exports = async report => {
         if (data.errored) {
             console.error(data.output);
 
-            if (report) {
-                const reportPath = path.resolve(process.cwd(), report);
-                if (!fse.existsSync(reportPath)) {
-                    fse.ensureDirSync(reportPath);
+            if (annotationsType === "GITHUB_ACTIONS") {
+                const annotations = getAnnotations(data.results, annotationsPrefix);
+                annotations.forEach(annotation => {
+                    const annotationFile = annotation.path;
+                    const annotationLine = annotation.start_line;
+                    const annotationMessage = _replace(_replace(annotation.message, "\r\n", "%0D%0A"), "\n", "%0D%0A");
+                    console.error(`::error file=${annotationFile},line=${annotationLine}::${annotationMessage}`);
+                });
+                console.error();
+            }
+
+            if (annotationsType === "FILE") {
+                const annotationnsDir = path.resolve(process.cwd(), annotationsPath);
+                if (!fse.existsSync(annotationnsDir)) {
+                    fse.ensureDirSync(annotationnsDir);
                 }
 
-                const reportFile = path.resolve(reportPath, `StyleLint.${uuid4()}.json`);
-                if (fse.existsSync(reportFile)) {
-                    console.error(`${chalk.red.bold("\u2716")} reportFile=${reportFile} already exists!`);
+                const annotationnsFile = path.resolve(annotationnsDir, `StyleLint.${uuid4()}.json`);
+                if (fse.existsSync(annotationnsFile)) {
+                    console.error(`${chalk.red.bold("\u2716")} annotationnsFile=${annotationnsFile} already exists!`);
                     process.exit(1);
                 }
 
-                fse.writeFileSync(
-                    reportFile,
-                    JSON.stringify(
-                        _.flatMap(data.results, result => {
-                            const relativePath = path
-                                .relative(process.cwd(), result.source)
-                                .split(path.sep)
-                                .join("/");
-
-                            return _.map(result.warnings, warning => {
-                                let startLine = 0;
-                                let endLine = 0;
-
-                                if (warning.line) {
-                                    startLine = warning.line;
-                                    endLine = warning.line;
-                                }
-
-                                return {
-                                    path: relativePath,
-                                    start_line: startLine,
-                                    end_line: endLine,
-                                    annotation_level: "failure",
-                                    message: `[${warning.severity}] ${warning.text}`
-                                };
-                            });
-                        })
-                    )
-                );
+                const annotations = getAnnotations(data.results, annotationsPrefix);
+                fse.writeFileSync(annotationnsFile, JSON.stringify(annotations));
             }
 
             process.exit(1);

@@ -1,8 +1,8 @@
-module.exports = async () => {
-    const chalk = require("chalk");
-    const process = require("process");
-    const stylelint = require("stylelint");
+const chalk = require("chalk");
+const process = require("process");
+const stylelint = require("stylelint");
 
+module.exports = async () => {
     try {
         const { getPaths, getStyleLintConfig } = require("../util");
         const config = getStyleLintConfig();

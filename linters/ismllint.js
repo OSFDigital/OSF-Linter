@@ -1,13 +1,40 @@
-module.exports = async report => {
-    const _ = require("lodash");
-    const chalk = require("chalk");
-    const fse = require("fs-extra");
-    const globby = require("globby");
-    const ismllinter = require("isml-linter");
-    const path = require("path");
-    const process = require("process");
-    const uuid4 = require("uuid/v4");
+const chalk = require("chalk");
+const fse = require("fs-extra");
+const globby = require("globby");
+const ismllinter = require("isml-linter");
+const path = require("path");
+const process = require("process");
+const uuid4 = require("uuid/v4");
+const _flatMap = require("lodash/flatMap");
 
+function getAnnotations(annotationsData, annotationsPrefix) {
+    return _flatMap(annotationsData, result => {
+        for (let source in result) {
+            if (result.hasOwnProperty(source)) {
+                return result[source].map(error => {
+                    let relativePath = path
+                        .relative(process.cwd(), source)
+                        .split(path.sep)
+                        .join("/");
+
+                    if (annotationsPrefix) {
+                        relativePath = `${annotationsPrefix}${relativePath}`;
+                    }
+
+                    return {
+                        path: relativePath,
+                        start_line: error.lineNumber,
+                        end_line: error.lineNumber,
+                        annotation_level: "failure",
+                        message: `${error.message} (${error.ruleId})`
+                    };
+                });
+            }
+        }
+    });
+}
+
+module.exports = async ({ annotationsType, annotationsPath, annotationsPrefix }) => {
     try {
         const { getPaths, getISMLLintConfig } = require("../util");
         const config = getISMLLintConfig();
@@ -19,36 +46,31 @@ module.exports = async report => {
         if (data.issueQty > 0 || data.warningCount > 0) {
             ismllinter.printResults();
 
-            if (report) {
-                let reportPath = path.resolve(process.cwd(), report);
-                if (!fse.existsSync(reportPath)) {
-                    fse.ensureDirSync(reportPath);
+            if (annotationsType === "GITHUB_ACTIONS") {
+                const annotations = getAnnotations(data.errors, annotationsPrefix);
+                annotations.forEach(annotation => {
+                    const annotationFile = annotation.path;
+                    const annotationLine = annotation.start_line;
+                    const annotationMessage = _replace(_replace(annotation.message, "\r\n", "%0D%0A"), "\n", "%0D%0A");
+                    console.error(`::error file=${annotationFile},line=${annotationLine}::${annotationMessage}`);
+                });
+                console.error();
+            }
+
+            if (annotationsType === "FILE") {
+                const annotationnsDir = path.resolve(process.cwd(), annotationsPath);
+                if (!fse.existsSync(annotationnsDir)) {
+                    fse.ensureDirSync(annotationnsDir);
                 }
 
-                let reportFile = path.resolve(reportPath, `ISMLLint.${uuid4()}.json`);
-                if (fse.existsSync(reportFile)) {
-                    console.error(`${chalk.red.bold("\u2716")} reportFile=${reportFile} already exists!`);
+                const annotationnsFile = path.resolve(annotationnsDir, `ISMLLint.${uuid4()}.json`);
+                if (fse.existsSync(annotationnsFile)) {
+                    console.error(`${chalk.red.bold("\u2716")} annotationnsFile=${annotationnsFile} already exists!`);
                     process.exit(1);
                 }
 
-                fse.writeFileSync(
-                    reportFile,
-                    JSON.stringify(
-                        _.flatMap(data.errors, result => {
-                            for (let path in result) {
-                                if (result.hasOwnProperty(path)) {
-                                    return result[path].map(error => ({
-                                        path: path,
-                                        start_line: error.lineNumber,
-                                        end_line: error.lineNumber,
-                                        annotation_level: "failure",
-                                        message: `[error] ${error.message} (${error.ruleId})`
-                                    }));
-                                }
-                            }
-                        })
-                    )
-                );
+                const annotations = getAnnotations(data.errors, annotationsPrefix);
+                fse.writeFileSync(annotationnsFile, JSON.stringify(annotations));
             }
 
             process.exit(1);

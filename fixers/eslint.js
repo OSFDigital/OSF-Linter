@@ -1,9 +1,9 @@
-module.exports = async () => {
-    const chalk = require("chalk");
-    const eslint = require("eslint");
-    const globby = require("globby");
-    const process = require("process");
+const chalk = require("chalk");
+const eslint = require("eslint");
+const globby = require("globby");
+const process = require("process");
 
+module.exports = async () => {
     try {
         const { getPaths, getESLintConfig } = require("../util");
         const baseConfig = getESLintConfig();

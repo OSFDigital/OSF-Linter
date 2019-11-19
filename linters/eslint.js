@@ -1,13 +1,55 @@
-module.exports = async report => {
-    const _ = require("lodash");
-    const chalk = require("chalk");
-    const eslint = require("eslint");
-    const fse = require("fs-extra");
-    const globby = require("globby");
-    const path = require("path");
-    const process = require("process");
-    const uuid4 = require("uuid/v4");
+const chalk = require("chalk");
+const eslint = require("eslint");
+const fse = require("fs-extra");
+const globby = require("globby");
+const path = require("path");
+const process = require("process");
+const uuid4 = require("uuid/v4");
+const _flatMap = require("lodash/flatMap");
+const _map = require("lodash/map");
+const _replace = require("lodash/replace");
 
+function getAnnotations(annotationsData, annotationsPrefix) {
+    return _flatMap(annotationsData, result => {
+        let relativePath = path
+            .relative(process.cwd(), result.filePath)
+            .split(path.sep)
+            .join("/");
+
+        if (annotationsPrefix) {
+            relativePath = `${annotationsPrefix}${relativePath}`;
+        }
+
+        return _map(result.messages, message => {
+            let startLine = 0;
+            let endLine = 0;
+
+            if (message.line) {
+                startLine = message.line;
+                endLine = message.line;
+            }
+
+            if (message.endLine && message.endLine > startLine) {
+                endLine = message.endLine;
+            }
+
+            let messageText = message.message;
+            if (message.ruleId) {
+                messageText = `${messageText} (${message.ruleId})`;
+            }
+
+            return {
+                path: relativePath,
+                start_line: startLine,
+                end_line: endLine,
+                annotation_level: "failure",
+                message: messageText
+            };
+        });
+    });
+}
+
+module.exports = async ({ annotationsType, annotationsPath, annotationsPrefix }) => {
     try {
         const { getPaths, getESLintConfig } = require("../util");
         const baseConfig = getESLintConfig();
@@ -18,59 +60,34 @@ module.exports = async report => {
         const data = cli.executeOnFiles(files);
 
         if (data.errorCount > 0 || data.warningCount > 0) {
-            let formatter = cli.getFormatter("stylish");
+            const formatter = cli.getFormatter("stylish");
             console.error(formatter(data.results));
 
-            if (report) {
-                let reportPath = path.resolve(process.cwd(), report);
-                if (!fse.existsSync(reportPath)) {
-                    fse.ensureDirSync(reportPath);
+            if (annotationsType === "GITHUB_ACTIONS") {
+                const annotations = getAnnotations(data.results, annotationsPrefix);
+                annotations.forEach(annotation => {
+                    const annotationFile = annotation.path;
+                    const annotationLine = annotation.start_line;
+                    const annotationMessage = _replace(_replace(annotation.message, "\r\n", "%0D%0A"), "\n", "%0D%0A");
+                    console.error(`::error file=${annotationFile},line=${annotationLine}::${annotationMessage}`);
+                });
+                console.error();
+            }
+
+            if (annotationsType === "FILE") {
+                const annotationnsDir = path.resolve(process.cwd(), annotationsPath);
+                if (!fse.existsSync(annotationnsDir)) {
+                    fse.ensureDirSync(annotationnsDir);
                 }
 
-                let reportFile = path.resolve(reportPath, `ESLintClient.${uuid4()}.json`);
-                if (fse.existsSync(reportFile)) {
-                    console.error(`${chalk.red.bold("\u2716")} reportFile=${reportFile} already exists!`);
+                const annotationnsFile = path.resolve(annotationnsDir, `ESLintClient.${uuid4()}.json`);
+                if (fse.existsSync(annotationnsFile)) {
+                    console.error(`${chalk.red.bold("\u2716")} annotationnsFile=${annotationnsFile} already exists!`);
                     process.exit(1);
                 }
 
-                fse.writeFileSync(
-                    reportFile,
-                    JSON.stringify(
-                        _.flatMap(data.results, result => {
-                            let relativePath = path
-                                .relative(process.cwd(), result.filePath)
-                                .split(path.sep)
-                                .join("/");
-
-                            return _.map(result.messages, message => {
-                                let messageType = "warning";
-                                if (message.fatal || message.severity === 2) {
-                                    messageType = "error";
-                                }
-
-                                let startLine = 0;
-                                let endLine = 0;
-
-                                if (message.line) {
-                                    startLine = message.line;
-                                    endLine = message.line;
-                                }
-
-                                if (message.endLine && message.endLine > startLine) {
-                                    endLine = message.endLine;
-                                }
-
-                                return {
-                                    path: relativePath,
-                                    start_line: startLine,
-                                    end_line: endLine,
-                                    annotation_level: "failure",
-                                    message: `[${messageType}] ${message.message} (${message.ruleId})`
-                                };
-                            });
-                        })
-                    )
-                );
+                const annotations = getAnnotations(data.results, annotationsPrefix);
+                fse.writeFileSync(annotationnsFile, JSON.stringify(annotations));
             }
 
             process.exit(1);

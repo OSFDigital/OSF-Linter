@@ -1,10 +1,10 @@
-module.exports = async () => {
-    const chalk = require("chalk");
-    const globby = require("globby");
-    const ismllinter = require("isml-linter");
-    const merge = require("deepmerge");
-    const process = require("process");
+const chalk = require("chalk");
+const globby = require("globby");
+const ismllinter = require("isml-linter");
+const merge = require("deepmerge");
+const process = require("process");
 
+module.exports = async () => {
     try {
         const { getPaths, getISMLLintConfig } = require("../util");
         const config = merge(getISMLLintConfig(), { autoFix: true });
