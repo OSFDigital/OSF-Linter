@@ -56,7 +56,7 @@ module.exports = async ({ annotationsType, annotationsPath, annotationsPrefix })
                 annotations.forEach(annotation => {
                     const annotationFile = annotation.path;
                     const annotationLine = annotation.start_line;
-                    const annotationMessage = _replace(_replace(annotation.message, "\r\n", "%0D%0A"), "\n", "%0D%0A");
+                    const annotationMessage = _replace(_replace(annotation.message, /\r/g, "%0D"), /\n/g, "%0A");
                     console.error(`::error file=${annotationFile},line=${annotationLine}::${annotationMessage}`);
                 });
                 console.error();
