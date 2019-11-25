@@ -61,6 +61,13 @@ module.exports = async ({ annotationsType, annotationsPath, annotationsPrefix })
 
         if (data.errorCount > 0 || data.warningCount > 0) {
             const formatter = cli.getFormatter("stylish");
+
+            if (annotationsType === "GITHUB_ACTIONS") {
+                console.log("::remove-matcher owner=eslint-compact::");
+                console.log("::remove-matcher owner=eslint-stylish::");
+                console.log();
+            }
+
             console.error(formatter(data.results));
 
             if (annotationsType === "GITHUB_ACTIONS") {

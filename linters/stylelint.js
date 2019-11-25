@@ -49,6 +49,12 @@ module.exports = async ({ annotationsType, annotationsPath, annotationsPrefix })
         const data = await stylelint.lint({ config, files, formatter });
 
         if (data.errored) {
+            if (annotationsType === "GITHUB_ACTIONS") {
+                console.log("::remove-matcher owner=eslint-compact::");
+                console.log("::remove-matcher owner=eslint-stylish::");
+                console.log();
+            }
+
             console.error(data.output);
 
             if (annotationsType === "GITHUB_ACTIONS") {

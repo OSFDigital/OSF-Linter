@@ -44,6 +44,12 @@ module.exports = async ({ annotationsType, annotationsPath, annotationsPrefix })
         const data = ismllinter.parse(files);
 
         if (data.issueQty > 0 || data.warningCount > 0) {
+            if (annotationsType === "GITHUB_ACTIONS") {
+                console.log("::remove-matcher owner=eslint-compact::");
+                console.log("::remove-matcher owner=eslint-stylish::");
+                console.log();
+            }
+
             ismllinter.printResults();
 
             if (annotationsType === "GITHUB_ACTIONS") {
