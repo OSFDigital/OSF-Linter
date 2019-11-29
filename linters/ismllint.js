@@ -6,6 +6,7 @@ const path = require("path");
 const process = require("process");
 const uuid4 = require("uuid/v4");
 const _flatMap = require("lodash/flatMap");
+const _replace = require("lodash/replace");
 
 function getAnnotations(annotationsData, annotationsPrefix) {
     return _flatMap(annotationsData, result => {
