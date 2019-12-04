@@ -27,7 +27,8 @@ The contents of the `osflinter.paths.js` should look like the bellow example, wi
 
 ```
 module.exports.JS = [
-    "cartridges/app_demo/**/*.js"
+    "cartridges/app_demo/**/*.js",  // include all JS files from the app_demo cartridge
+    "!cartridges/app_demo/cartridge/client/default/js/specific-file.js" // exclude this JavaScript file using a path pattern that begins with "!"
 ];
 
 module.exports.SCSS = [
