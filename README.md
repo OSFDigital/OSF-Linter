@@ -136,5 +136,9 @@ module.exports = require("@osf-global/linter/config/.ismllintrc");
 module.exports.rules.indent = {value: 2};
 ```
 
+You can find all available rules and configurations for Isml Linter [here][url-isml-linter].
+
 ## Contributors
 See https://github.com/OSFGlobal/OSF-Linter/graphs/contributors for a list of people that contributed to this project
+
+[url-isml-linter]:  <https://www.npmjs.com/package/isml-linter>
