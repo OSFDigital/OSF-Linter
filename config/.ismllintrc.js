@@ -1,4 +1,5 @@
 module.exports = {
+    enableCache: true,
     rules: {
         // Line by line rules;
         "enforce-isprint": {},
