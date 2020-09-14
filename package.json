@@ -25,6 +25,7 @@
     "stylelint-scss": "^3.8.0",
     "uuid": "^3.3.2",
     "yargs": "^13.2.4",
+    "yargs-parser": ">=13.1.2",
     "babel-eslint": "^10.0.3",
     "kind-of": ">=6.0.3",
     "dot-prop": ">=5.1.1"
