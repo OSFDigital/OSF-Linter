@@ -17,6 +17,7 @@ module.exports = {
         "no-embedded-isml": {},
         "no-hardcode": {},
         "no-require-in-loop": {},
+        "enforce-security" : {},
         "one-element-per-line": {}
     }
 };
