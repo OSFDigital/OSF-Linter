@@ -4,19 +4,16 @@ const globby = require("globby");
 const ismllinter = require("isml-linter");
 const path = require("path");
 const process = require("process");
-const uuid4 = require("uuid/v4");
+const { v4: uuid4 } = require("uuid");
 const _flatMap = require("lodash/flatMap");
 const _replace = require("lodash/replace");
 
 function getAnnotations(annotationsData, annotationsPrefix) {
-    return _flatMap(annotationsData, result => {
+    return _flatMap(annotationsData, (result) => {
         for (let source in result) {
             if (result.hasOwnProperty(source)) {
-                return result[source].map(error => {
-                    let relativePath = path
-                        .relative(process.cwd(), source)
-                        .split(path.sep)
-                        .join("/");
+                return result[source].map((error) => {
+                    let relativePath = path.relative(process.cwd(), source).split(path.sep).join("/");
 
                     if (annotationsPrefix) {
                         relativePath = `${annotationsPrefix}${relativePath}`;
@@ -27,7 +24,7 @@ function getAnnotations(annotationsData, annotationsPrefix) {
                         start_line: error.lineNumber,
                         end_line: error.lineNumber,
                         annotation_level: "failure",
-                        message: `${error.message} (${error.ruleId})`
+                        message: `${error.message} (${error.ruleId})`,
                     };
                 });
             }
@@ -55,7 +52,7 @@ module.exports = async ({ annotationsType, annotationsPath, annotationsPrefix })
 
             if (annotationsType === "GITHUB_ACTIONS") {
                 const annotations = getAnnotations(data.errors, annotationsPrefix);
-                annotations.forEach(annotation => {
+                annotations.forEach((annotation) => {
                     const annotationFile = annotation.path;
                     const annotationLine = annotation.start_line;
                     const annotationMessage = _replace(_replace(annotation.message, /\r/g, "%0D"), /\n/g, "%0A");

@@ -16,9 +16,9 @@ module.exports = {
                     "return",
                     "warn",
                     "error",
-                    "function"
-                ]
-            }
+                    "function",
+                ],
+            },
         ],
         indentation: 4,
         "scss/at-import-no-partial-leading-underscore": true,
@@ -30,10 +30,10 @@ module.exports = {
             "always",
             {
                 ignoreAtRules: ["else"],
-                ignore: ["blockless-after-same-name-blockless", "inside-block"]
-            }
+                ignore: ["blockless-after-same-name-blockless", "inside-block"],
+            },
         ],
         "block-closing-brace-newline-after": ["always", { ignoreAtRules: ["if", "else"] }],
-        "string-quotes": ["double", { avoidEscape: false }]
-    }
+        "string-quotes": ["double", { avoidEscape: false }],
+    },
 };

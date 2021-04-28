@@ -4,23 +4,20 @@ const fse = require("fs-extra");
 const globby = require("globby");
 const path = require("path");
 const process = require("process");
-const uuid4 = require("uuid/v4");
+const { v4: uuid4 } = require("uuid");
 const _flatMap = require("lodash/flatMap");
 const _map = require("lodash/map");
 const _replace = require("lodash/replace");
 
 function getAnnotations(annotationsData, annotationsPrefix) {
-    return _flatMap(annotationsData, result => {
-        let relativePath = path
-            .relative(process.cwd(), result.filePath)
-            .split(path.sep)
-            .join("/");
+    return _flatMap(annotationsData, (result) => {
+        let relativePath = path.relative(process.cwd(), result.filePath).split(path.sep).join("/");
 
         if (annotationsPrefix) {
             relativePath = `${annotationsPrefix}${relativePath}`;
         }
 
-        return _map(result.messages, message => {
+        return _map(result.messages, (message) => {
             let startLine = 0;
             let endLine = 0;
 
@@ -43,7 +40,7 @@ function getAnnotations(annotationsData, annotationsPrefix) {
                 start_line: startLine,
                 end_line: endLine,
                 annotation_level: "failure",
-                message: messageText
+                message: messageText,
             };
         });
     });
@@ -72,7 +69,7 @@ module.exports = async ({ annotationsType, annotationsPath, annotationsPrefix })
 
             if (annotationsType === "GITHUB_ACTIONS") {
                 const annotations = getAnnotations(data.results, annotationsPrefix);
-                annotations.forEach(annotation => {
+                annotations.forEach((annotation) => {
                     const annotationFile = annotation.path;
                     const annotationLine = annotation.start_line;
                     const annotationMessage = _replace(_replace(annotation.message, /\r/g, "%0D"), /\n/g, "%0A");

@@ -10,7 +10,7 @@ const argv = yargs
         alias: "fixer",
         demandOption: true,
         describe: "Fixer type",
-        choices: ["JS", "SCSS", "ISML"]
+        choices: ["JS", "SCSS", "ISML"],
     })
     .alias("v", "version")
     .alias("h", "help")

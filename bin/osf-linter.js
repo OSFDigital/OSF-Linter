@@ -10,20 +10,20 @@ const argv = yargs
         alias: "linter",
         demandOption: true,
         describe: "Linter type",
-        choices: ["JS", "SCSS", "ISML"]
+        choices: ["JS", "SCSS", "ISML"],
     })
     .option("annotations-type", {
         describe: "Annotations type",
         default: "NONE",
-        choices: ["NONE", "FILE", "GITHUB_ACTIONS"]
+        choices: ["NONE", "FILE", "GITHUB_ACTIONS"],
     })
     .option("annotations-path", {
-        describe: "Annotations path"
+        describe: "Annotations path",
     })
     .option("annotations-prefix", {
-        describe: "Annotations prefix"
+        describe: "Annotations prefix",
     })
-    .check(argv => {
+    .check((argv) => {
         if (argv.annotationsType === "FILE" && !argv.annotationsPath) {
             throw new Error(
                 `${chalk.red.bold("\u2716")} Missing dependent arguments: annotations-type -> annotations-path`

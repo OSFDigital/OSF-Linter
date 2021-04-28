@@ -1,4 +1,4 @@
-module.exports.getPaths = name => {
+module.exports.getPaths = (name) => {
     const chalk = require("chalk");
     const fse = require("fs-extra");
     const path = require("path");

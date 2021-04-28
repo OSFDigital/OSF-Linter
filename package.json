@@ -1,33 +1,30 @@
 {
-  "name": "@osf-global/linter",
-  "version": "4.3.2",
-  "repository": "git@github.com:OSFGlobal/OSF-Linter.git",
-  "author": "Daniel Anechitoaie <daniel.anechitoaie@osf.digital>",
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
-  "main": "index.js",
-  "bin": {
-    "osf-linter": "./bin/osf-linter.js",
-    "osf-fixer": "./bin/osf-fixer.js"
-  },
-  "dependencies": {
-    "babel-eslint": "^10.0.3",
-    "chalk": "^2.4.2",
-    "deepmerge": "^3.3.0",
-    "dot-prop": ">=5.1.1",
-    "eslint": "^6.0.0",
-    "fs-extra": "^8.0.1",
-    "globby": "^9.2.0",
-    "isml-linter": "^5.35.0",
-    "kind-of": ">=6.0.3",
-    "lodash": ">=4.17.19",
-    "stylelint": "^13.9.0",
-    "stylelint-config-standard": "^18.3.0",
-    "stylelint-scss": "^3.8.0",
-    "uuid": "^3.3.2",
-    "yargs": "^13.2.4",
-    "yargs-parser": ">=13.1.2"
-  }
+    "name": "@osf.digital/linter",
+    "version": "1.0.0",
+    "repository": "git@github.com:OSFDigital/Linter.git",
+    "author": "Daniel Anechitoaie <daniel.anechitoaie@osf.digital>",
+    "license": "MIT",
+    "publishConfig": {
+        "access": "public"
+    },
+    "main": "index.js",
+    "bin": {
+        "osf-linter": "./bin/osf-linter.js",
+        "osf-fixer": "./bin/osf-fixer.js"
+    },
+    "devDependencies": {
+        "@babel/eslint-parser": "^7.13.14",
+        "chalk": "^4.1.1",
+        "deepmerge": "^4.2.2",
+        "eslint": "^7.25.0",
+        "fs-extra": "^9.1.0",
+        "globby": "^11.0.3",
+        "isml-linter": "^5.35.1",
+        "lodash": "^4.17.21",
+        "stylelint": "^13.13.0",
+        "stylelint-config-standard": "^22.0.0",
+        "stylelint-scss": "^3.19.0",
+        "uuid": "^8.3.2",
+        "yargs": "^16.2.0"
+    }
 }

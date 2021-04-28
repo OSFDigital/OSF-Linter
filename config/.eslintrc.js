@@ -3,7 +3,7 @@ module.exports = {
     extends: "eslint:recommended",
     env: {
         commonjs: true,
-        es6: true
+        es6: true,
     },
     globals: {},
     rules: {
@@ -27,6 +27,6 @@ module.exports = {
         "space-before-blocks": ["error", "always"],
         "space-before-function-paren": ["error", { anonymous: "always", named: "never", asyncArrow: "always" }],
         "space-in-parens": ["error", "never"],
-        strict: ["error", "global"]
-    }
+        strict: ["error", "global"],
+    },
 };
